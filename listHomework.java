@@ -1,6 +1,25 @@
+package homework;
+
+
 import java.util.*;
 
 public class listHomework{
+	Random num = new Random();
+	
+public void knuth(String[] word) {
+	//setting variable to the one less than the length of the list
+	//as long as variable value is greater than 0, subtract one to iterate through
+	for(int i = word.length-1; i > 0; i--) {
+		int a = num.nextInt(word.length-1);
+		// creating a string temp that will hold the word of the initial index
+		String temp = word[i];
+		//swapping the initial index with second index 
+		word[i] = word[a];
+		//swapping the second index to the original word
+		word[a] = temp;
+		System.out.println(Arrays.toString(word));
+	}
+}
    
    public static void main(String[] args){
       List<String> hwStrings = new ArrayList<String>();
@@ -27,7 +46,7 @@ public class listHomework{
       //creating list for numbers
       List<Integer> numList = new ArrayList<Integer>();
       
-      for(int i = 0; i < 10; i++) {
+      for(int i = 0; i < 10; i++) { 
          numList.add(i);
       }
       System.out.println(numList);
@@ -45,5 +64,8 @@ public class listHomework{
          }
       }
       System.out.println(total);
+      listHomework tester = new listHomework();
+      String[] test = {"Dog", "Cat", "Bird", "Horse", "Snake", "Frog"};
+      tester.knuth(test);
    }
 }
