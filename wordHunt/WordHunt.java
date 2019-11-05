@@ -10,11 +10,15 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.JPanel;
+
+import java.awt.*;
+
 public class WordHunt {
 	//creating dimensions for the grid
 	public static int Rows = 10;
 	public static int Cols = 10;
-	public static final int sizeofGride = Rows * Cols;
+	public static final int sizeofGrid = Rows * Cols;
 	char[][] gamechar = new char[Rows][Cols];
 	List <String> AnswerKey = new ArrayList<>();
 	public static int totalWords = 11; 
@@ -59,7 +63,11 @@ public class WordHunt {
 		
 		return words;
 	}
-
+	
+	public static void generate(List<String> words) {
+		JPanel grid = new JPanel();
+		grid.setLayout(new GridLayout(Rows,Cols));
+	}
 	
 	public static void main(String[] args) {
 		//creating file on system with content for game
