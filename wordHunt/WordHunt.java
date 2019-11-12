@@ -1,6 +1,8 @@
 package wordHunt;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -45,7 +47,7 @@ class MoveAction extends AbstractAction{
 		if(y != 0) {
 			next.y += y;
 		}
-		System.out.println("Next Coord: " + next);
+		//AzSystem.out.println("Next Coord: " + next);
 		//check if point exists in our grid mapping, if so update the position's color
 		if(BasicGrid.lazyGrid.containsKey(next)) {
 			BasicGrid.lazyGrid.get(next).setBackground(Color.red);
@@ -76,6 +78,7 @@ public class WordHunt {
 	};
 
 	public void writeToFile(String fileName, String msg) {
+		// this function will write words of the game file if it doesn't exist on the computer 
 		try(FileWriter fw = new FileWriter(fileName)){
 			Scanner scan = new Scanner(System.in);
 			msg = scan.nextLine();
@@ -99,7 +102,7 @@ public class WordHunt {
 				//all while there is content to be scanned from file
 	  			String data = reader.next().trim().toLowerCase();
 	  			
-	  			//checking if letters fall in range of shortest word and longer
+	  			//checking if letters fall in range of shortest word and longest
 	  			if(data.matches("^[a-z]{3," + maxLetterLength + "}$")) {
 	  				words.add(data.toUpperCase());
 	  			}
@@ -112,9 +115,82 @@ public class WordHunt {
 		return words;
 	}
 	
+	public static int wordLocation(JPanel grid, String word) {
+		Random num = new Random();
+		//creating variable to hold direction user can move. 8 possible directions
+		int anyDirection = num.nextInt(directions.length);
+		//arring the grid so letters can be distributed anywhere on the grid
+		int anyPosition = num.nextInt(sizeofGrid);
+		
+		for (int pattern = 0; pattern < directions.length; pattern++) {
+			pattern = (pattern + anyDirection) % directions.length;
+			
+			for (int pos = 0; pos < sizeofGrid; pos++) {
+				pos = (pos + anyPosition) % sizeofGrid;
+				int letterPlacement = locationAttempt(grid, word, dir, pos);
+				
+				if (letterPlacement > 0)
+					return letterPlacement;
+			}
+		}
+		
+		return 0;
+	}
+	
+	public static int LocationAttempt(JPanel grid, String word, int dir, int pos) {
+		int r = pos / Cols;
+		int c = pos % Cols;
+		int length = word.length();
+		
+		if((directions[dir][0] == 1 && (length + c) > Cols)
+				|| (directions[dir][0] == -1 && (length -1) > c)
+				|| (directions[dir][1] == 1 && (length + r) > Rows)
+				|| (directions[dir][1] == -1 && (length + -1) > r))
+			return 0;
+		int i ,rr, cc, overlaps = 0;
+		
+		for (int i = 0, rr = r, cc = c; i < length; i++) {
+			if (grid.gamechar[rr][cc] != 0 && grid.gamechar[rr][cc] != word.charAt(i))
+				return 0;
+			
+			cc+= directions[dir][0];
+			rr += directions[dir][1];
+		}
+		
+		for (int i = 0, rr = r, cc = c; i < length; i++) {
+			if (grid.gamechar[rr][cc] == word.charAt(i))
+				overlaps++;
+			else grid.gamechar[rr][cc] = word.charAt(i);
+			
+			if (i < length - 1) {
+				cc += directions[dir][0];
+				rr += directions[dir][1];
+			}
+		}
+		
+		int placedLetters = length - overlaps;
+		
+		if(placedLetters > 0)
+			grid.AnswerKey.add(String.format("%d, %d)(%d, %d)", word, c, r, cc, rr));
+		return placedLetters;
+	
+	}
+	
+	public static void Results(Jpanel grid) {
+		if(grid == null)
+			System.out.println("Can't generate grid");
+			return;
+	}
+	
+	int size = grid.AnserKey.size();
+	
 	public static void generate(List<String> words) {
-		JPanel grid = new JPanel();
+		JPanel grid = new JPanel("The Greetings Word Hunt");
 		grid.setLayout(new GridLayout(Rows,Cols));
+		grid.setLayout(new BorderLayout());
+		grid.setSize(new Dimension(600,600));
+		grid.setMinimumSize(new Dimension(600,600));
+		
 	}
 	
 	public static boolean stringCheck(String words) {
@@ -167,12 +243,11 @@ public class WordHunt {
 		String alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		int letter = alph.length();
 		
-		
 		Random n = new Random();
 		
-		for (int i = 0; i < 36; i++) {
-			System.out.println(alph.charAt(n.nextInt(letter)));
-		}
+		//for (int i = 0; i < 36; i++) {
+		//	System.out.println(alph.charAt(n.nextInt(letter)));
+		//}
 	}
 }
 
