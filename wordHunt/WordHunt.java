@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.Random;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -30,13 +31,25 @@ public static void main(String[] args) {
 	grid.setSize(gridDimensions);
 	frame.add(grid);
 	
+	JButton bt = new JButton();
+	int i = 0;
+	Dimension buttonSize = new Dimension(31,31);
+	
+	
 	for(int y = 0; y < nCOLS; y++) {
 		for(int x = 0; x < nROWS; x++) {
 		Random num = new Random();
 
 	    String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	    Component letter = alphabet.charAt(num.nextInt(alphabet.length()));
-	    frame.add(letter);
+	    char random = alphabet.charAt(num.nextInt(alphabet.length()));
+	    String randomLetter = String.valueOf(random);
+	    System.out.println(randomLetter);
+		//String buttonText = String.format("Index: %1$s Coord: (%2$s, %3$s)", i, x, y);
+		bt.setText(randomLetter);
+		bt.setLocation(x, y);
+		bt.setSize(buttonSize);
+	
+		grid.add(bt);
 	    	} // prints 50 rand
 	
 		}
