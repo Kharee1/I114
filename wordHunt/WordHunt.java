@@ -31,25 +31,26 @@ public static void main(String[] args) {
 	grid.setSize(gridDimensions);
 	frame.add(grid);
 	
-	JButton bt = new JButton();
+	Random num = new Random();
 	int i = 0;
-	Dimension buttonSize = new Dimension(31,31);
+	Dimension buttonSize = new Dimension(10,10);
 	
+	for(int y = 0; y < nROWS; y++) {
+		for(int x = 0; x < nCOLS; x++) {
+			JButton bt = new JButton();
+			
 	
-	for(int y = 0; y < nCOLS; y++) {
-		for(int x = 0; x < nROWS; x++) {
-		Random num = new Random();
-
-	    String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	    char random = alphabet.charAt(num.nextInt(alphabet.length()));
-	    String randomLetter = String.valueOf(random);
-	    System.out.println(randomLetter);
-		//String buttonText = String.format("Index: %1$s Coord: (%2$s, %3$s)", i, x, y);
-		bt.setText(randomLetter);
-		bt.setLocation(x, y);
-		bt.setSize(buttonSize);
+		    String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		    char random = alphabet.charAt(num.nextInt(alphabet.length()));
+		    String randomLetter = String.valueOf(random);
+		    System.out.println(randomLetter);
+			//String buttonText = String.format("Index: %1$s Coord: (%2$s, %3$s)", i, x, y);
+			bt.setText(randomLetter);
+			bt.setLocation(x, y);
+			bt.setSize(buttonSize);
 	
-		grid.add(bt);
+	grid.add(bt);
+	i++;
 	    	} // prints 50 rand
 	
 		}
