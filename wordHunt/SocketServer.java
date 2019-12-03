@@ -16,7 +16,7 @@ public class SocketServer {
 	}
 	private void start(int port) {
 		this.port = port;
-		System.out.println("Waiting for client");
+		System.out.println("Loading...");
 		try (ServerSocket serverSocket = new ServerSocket(port);
 				Socket client = serverSocket.accept();
 				PrintWriter out = new PrintWriter(client.getOutputStream(), true);
@@ -26,19 +26,19 @@ public class SocketServer {
 			String fromClient = "";
 			String toClient = "";
 			while ((fromClient = in.readLine()) != null) {
-				if ("kill server".equalsIgnoreCase(fromClient)) {
-					System.out.println("Client killed server");
+				if ("Exit game".equalsIgnoreCase(fromClient)) {
+					System.out.println("Game shutting down");
 					break;
 				}
 				else {
-					System.out.println("From client: " + fromClient);
+					System.out.println("Ending game");
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				System.out.println("closing server socket");
+				System.out.println("Closing Connection");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
