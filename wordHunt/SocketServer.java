@@ -16,23 +16,23 @@ public class SocketServer {
 	}
 	private void start(int port) {
 		this.port = port;
-		System.out.println("Loading...");
+		System.out.println("Starting game...");
 		try (ServerSocket serverSocket = new ServerSocket(port);
 				Socket client = serverSocket.accept();
 				PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));) {
 			
-			System.out.println("Client connected, waiting for message");
+			System.out.println("Client connected");
 			String fromClient = "";
 			String toClient = "";
 			while ((fromClient = in.readLine()) != null) {
-				if ("Exit game".equalsIgnoreCase(fromClient)) {
+				if ("Exit game".equalsIgnoreCase(fromClient) || ("Quit".equalsIgnoreCase(fromClient))){
 					System.out.println("Game shutting down");
 					break;
 				}
-				else {
+				/*else {
 					System.out.println("Ending game");
-				}
+				}*/
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -46,9 +46,8 @@ public class SocketServer {
 	}
 
 	
-
 	public static void main(String[] arg) {
-		System.out.println("Starting Server");
+		System.out.println("Starting Server. Waiting for user to connect to game.");
 		SocketServer server = new SocketServer();
 		server.start(3002);
 		System.out.println("Server Stopped");

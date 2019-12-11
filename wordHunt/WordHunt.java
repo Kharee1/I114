@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -29,8 +30,66 @@ public class WordHunt {
 	public static final int nCOLS = 10;
 	public static final int gridSize = nROWS * nCOLS;
 	public ArrayList<String> wordsToFind = new ArrayList<String>();
-	public ArrayList<Character> wordCheck = new ArrayList<Character>();
-	
+		
+	Socket server;
+	public WordHunt() {
+		
+	}
+	public void connect(String address, int port) {
+		try {
+			server = new Socket(address, port);
+			System.out.println("User connected. Initiating game");
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void start() throws IOException {
+		if(server == null) {
+			return;
+		}
+		//System.out.println("Listening for input");
+		try(Scanner si = new Scanner(System.in);
+				PrintWriter out = new PrintWriter(server.getOutputStream(), true);
+				BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));){
+			String line = "";
+			while(true) {
+				try {
+					//System.out.println("Waiting for input");
+					line = si.nextLine();
+					if(!"quit".equalsIgnoreCase(line)) {
+						out.println(line);
+					}
+					else {
+						break;
+					}
+					line = "";
+				}
+				catch(Exception e) {
+					System.out.println("Connection dropped");
+					break;
+				}
+			}
+			System.out.println("Exited loop");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			close();
+		}
+	}
+	private void close() {
+		if(server != null) {
+			try {
+				server.close();
+				System.out.println("Closed socket");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	public boolean fileFinder(String fileName) {
 		
@@ -46,7 +105,7 @@ public class WordHunt {
 			}
 			wordsToFind.add(gameWords);
 			scan.close();
-			System.out.println(wordsToFind);
+			System.out.println("The words to  find are in the following list " + wordsToFind);
 		
 		}catch(FileNotFoundException e) {
 			e.printStackTrace();
@@ -71,86 +130,27 @@ public class WordHunt {
 			System.out.println("Enter key was pressed");
 	}
     
-	 public String foundWords() {
+	 public String foundWords(ArrayList<String> wordCheck) {
 		 StringBuilder builder = new StringBuilder();
-		 for(Character ch : wordCheck) {
-			 builder.append(ch).append(',');
+		 System.out.println("" + wordCheck);
+		 for(String ch : wordCheck) {
+			 builder.append(ch);
 			 System.out.println(builder);
 		 }
-		 if(builder.length() > 0){
-			 builder.deleteCharAt(builder.length() - 1); 
-		 }
-		 System.out.println(builder);
+		// if(builder.length() > 0){
+		//	 builder.deleteCharAt(builder.length() - 1); 
+		// }
+		 //System.out.println(builder);
 		 return builder.toString(); 
 	 }
-	 
-	 Socket server;
-		public void connect(String address, int port) {
-			try {
-				server = new Socket(address, port);
-				System.out.println("Client connected");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	 
-		public void start() throws IOException {
-			if(server == null) {
-				return;
-			}
-			System.out.println("Listening for input");
-			try(Scanner si = new Scanner(System.in);
-					PrintWriter out = new PrintWriter(server.getOutputStream(), true);
-					BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));){
-				String line = "";
-				while(true) {
-					try {
-						System.out.println("Waiting for input");
-						line = si.nextLine();
-						if(!"quit".equalsIgnoreCase(line)) {
-							out.println(line);
-						}
-						else {
-							break;
-						}
-						line = "";
-					}
-					catch(Exception e) {
-						System.out.println("Connection dropped");
-						break;
-					}
-				}
-				System.out.println("Exited loop");
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-			finally {
-				close();
-			}
-		}
-		private void close() {
-			if(server != null) {
-				try {
-					server.close();
-					System.out.println("Closed socket");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	
-	/*
-	 * public void foundWords() {
-	 * 
-	 * }
-	 */
+
 
 public static void main(String[] args) {
 	
 	String fileName = "gamedata.txt";
 	WordHunt game = new WordHunt();
-	//game.foundWords();
+	WordHunt client = new WordHunt();
+	client.connect("127.0.0.1", 3002);
 	game.wordComparison();
 	if(game.fileFinder(fileName)) {
 		System.out.println("\n" + "Beginning game shortly.");
@@ -198,6 +198,7 @@ public static void main(String[] args) {
 						System.out.println(e.getSource());
 						wordCheck.add(((JButton)e.getSource()).getText());
 						System.out.println(wordCheck.toString());
+						game.foundWords(wordCheck);
 					}
 				});
 		
