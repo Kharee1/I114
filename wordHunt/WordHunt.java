@@ -29,7 +29,7 @@ public class WordHunt {
 	public static final int nROWS = 10;
 	public static final int nCOLS = 10;
 	public static final int gridSize = nROWS * nCOLS;
-	public ArrayList<String> wordsToFind = new ArrayList<String>();
+	public static ArrayList<String> wordsToFind = new ArrayList<String>();
 		
 	Socket server;
 	public WordHunt() {
@@ -49,14 +49,12 @@ public class WordHunt {
 		if(server == null) {
 			return;
 		}
-		//System.out.println("Listening for input");
 		try(Scanner si = new Scanner(System.in);
 				PrintWriter out = new PrintWriter(server.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));){
 			String line = "";
 			while(true) {
 				try {
-					//System.out.println("Waiting for input");
 					line = si.nextLine();
 					if(!"quit".equalsIgnoreCase(line)) {
 						out.println(line);
@@ -100,12 +98,13 @@ public class WordHunt {
 				String data = scan.nextLine();
 		        gameWords += data;
 		        if(scan.hasNextLine()) {
-		        	gameWords += System.lineSeparator();
+		        	gameWords += ", ";
 		        }
 			}
 			wordsToFind.add(gameWords);
 			scan.close();
-			System.out.println("The words to  find are in the following list " + wordsToFind);
+			//for(String ch: wordsToFind) {System.out.println(ch);}
+			System.out.println("The words to find are the following: " + gameWords + "\n" + "Good Luck!");
 		
 		}catch(FileNotFoundException e) {
 			e.printStackTrace();
@@ -115,11 +114,11 @@ public class WordHunt {
 		return true;
 	}
 	
-	public void wordComparison() {
-		for (int i =0; i < wordsToFind.size(); i++) {
-			System.out.println(wordsToFind.get(i));
-		}
-	}
+	/*
+	 * public void wordComparison(String foundWords, ArrayList<String> wordsToFind)
+	 * { for (int i = 0; i < foundWords.length(); i++) { if(wordsToFind.contains(i))
+	 * { System.out.println(i); } } }
+	 */
 	
 	public void keyPressed(KeyEvent e) {
         System.out.println("keyPressed");
@@ -132,15 +131,10 @@ public class WordHunt {
     
 	 public String foundWords(ArrayList<String> wordCheck) {
 		 StringBuilder builder = new StringBuilder();
-		 System.out.println("" + wordCheck);
 		 for(String ch : wordCheck) {
 			 builder.append(ch);
-			 System.out.println(builder);
 		 }
-		// if(builder.length() > 0){
-		//	 builder.deleteCharAt(builder.length() - 1); 
-		// }
-		 //System.out.println(builder);
+		 System.out.println("You created this word " + builder.toString());
 		 return builder.toString(); 
 	 }
 
@@ -151,7 +145,7 @@ public static void main(String[] args) {
 	WordHunt game = new WordHunt();
 	WordHunt client = new WordHunt();
 	client.connect("127.0.0.1", 3002);
-	game.wordComparison();
+	//game.wordComparison(foundWords(null), wordsToFind);
 	if(game.fileFinder(fileName)) {
 		System.out.println("\n" + "Beginning game shortly.");
 		
@@ -170,8 +164,6 @@ public static void main(String[] args) {
 		container.setSize(new Dimension(800,800));
 		container.setMinimumSize(new Dimension(600, 600));
 		container.setBorder(BorderFactory.createLineBorder(Color.red));
-
-		//List<Location> wordCheck = new LinkedList<Location>();
 		
 		ArrayList<String> wordCheck = new ArrayList<String>();
 		
