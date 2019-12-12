@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,13 +22,14 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class WordHunt {
 	//creating rows and cols variable
 	public static final int nROWS = 10;
 	public static final int nCOLS = 10;
 	public static final int gridSize = nROWS * nCOLS;
-	public static ArrayList<String> wordsToFind = new ArrayList<String>();
+	public ArrayList<String> wordsToFind = new ArrayList<String>();
 		
 	Socket server;
 	public WordHunt() {
@@ -103,7 +103,6 @@ public class WordHunt {
 			}
 			wordsToFind.add(gameWords);
 			scan.close();
-			//for(String ch: wordsToFind) {System.out.println(ch);}
 			System.out.println("The words to find are the following: " + gameWords + "\n" + "Good Luck!");
 		
 		}catch(FileNotFoundException e) {
@@ -114,19 +113,17 @@ public class WordHunt {
 		return true;
 	}
 	
-	/*
-	 * public void wordComparison(String foundWords, ArrayList<String> wordsToFind)
-	 * { for (int i = 0; i < foundWords.length(); i++) { if(wordsToFind.contains(i))
-	 * { System.out.println(i); } } }
-	 */
-	
-	public void keyPressed(KeyEvent e) {
-        System.out.println("keyPressed");
-    }
-
-    public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode()==KeyEvent.VK_ENTER)
-			System.out.println("Enter key was pressed");
+	public void getLetters(){
+		//char ch;
+		char comma = ',';
+		for(String word: wordsToFind) {
+			for(int i = 0; i < word.length(); i++) {
+				if (word.charAt(i) == comma) {
+				}
+				else
+					System.out.println(word.charAt(i));
+			}
+		}
 	}
     
 	 public String foundWords(ArrayList<String> wordCheck) {
@@ -134,8 +131,18 @@ public class WordHunt {
 		 for(String ch : wordCheck) {
 			 builder.append(ch);
 		 }
-		 System.out.println("You created this word " + builder.toString());
-		 return builder.toString(); 
+	System.out.println("You created this word " + builder.toString());
+	return builder.toString(); 
+	 }
+	 
+	 public boolean compareWords(String builder) {
+		 for (String createdWord: wordsToFind) {
+			 if (wordsToFind.contains(createdWord)){
+				 System.out.println("Your word was found: " + createdWord);
+			 }
+			 //return createdWord;
+		 }
+		 return true;
 	 }
 
 
@@ -165,6 +172,32 @@ public static void main(String[] args) {
 		container.setMinimumSize(new Dimension(600, 600));
 		container.setBorder(BorderFactory.createLineBorder(Color.red));
 		
+		JPanel btnholder = new JPanel();
+		btnholder.setSize(new Dimension(400,400));
+		
+		JButton quitButton = new JButton();
+		quitButton.setSize(new Dimension(30,20));
+		quitButton.setText("Quit");
+		
+		JButton submitButton = new JButton();
+		submitButton.setSize(new Dimension(30,20));
+		submitButton.setText("Submit");	
+		
+			/*
+			 * submitButton.addActionListener(new ActionListener() {
+			 * 
+			 * @Override
+			 * 
+			 * });
+			 */
+		
+			/*
+			 * quitButton.addActionListener(new ActionListener() {
+			 * 
+			 * @Override public void actionPerformed(ActionEvent e) {
+			 * //interaction.client.disconnect(); } });
+			 */
+		
 		ArrayList<String> wordCheck = new ArrayList<String>();
 		
 		Random num = new Random();
@@ -191,6 +224,8 @@ public static void main(String[] args) {
 						wordCheck.add(((JButton)e.getSource()).getText());
 						System.out.println(wordCheck.toString());
 						game.foundWords(wordCheck);
+						//game.wordComparison(foundWords, wordsToFind);
+						
 					}
 				});
 		
@@ -203,6 +238,11 @@ public static void main(String[] args) {
 			}
 		frame.setVisible(true);
 		frame.add(canvas);
+		frame.add(btnholder, BorderLayout.SOUTH);
+		btnholder.add(submitButton);
+		btnholder.add(quitButton);
+		game.getLetters();
+		
 		}
 	}
 }
