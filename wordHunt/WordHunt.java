@@ -113,15 +113,17 @@ public class WordHunt {
 		return true;
 	}
 	
-	public void getLetters(){
+	public void letterPlacement(){
 		//char ch;
 		char comma = ',';
 		for(String word: wordsToFind) {
 			for(int i = 0; i < word.length(); i++) {
 				if (word.charAt(i) == comma) {
 				}
-				else
-					System.out.println(word.charAt(i));
+				else {
+					char letter = word.charAt(i);
+					//System.out.println(letter);
+				}
 			}
 		}
 	}
@@ -183,6 +185,8 @@ public static void main(String[] args) {
 		submitButton.setSize(new Dimension(30,20));
 		submitButton.setText("Submit");	
 		
+		
+		
 			/*
 			 * submitButton.addActionListener(new ActionListener() {
 			 * 
@@ -191,12 +195,14 @@ public static void main(String[] args) {
 			 * });
 			 */
 		
-			/*
-			 * quitButton.addActionListener(new ActionListener() {
-			 * 
-			 * @Override public void actionPerformed(ActionEvent e) {
-			 * //interaction.client.disconnect(); } });
-			 */
+			
+			 quitButton.addActionListener(new ActionListener() {
+			 
+			 @Override public void actionPerformed(ActionEvent e) {
+				 frame.dispose();
+				 client.close();
+			 	}
+			 });
 		
 		ArrayList<String> wordCheck = new ArrayList<String>();
 		
@@ -241,7 +247,7 @@ public static void main(String[] args) {
 		frame.add(btnholder, BorderLayout.SOUTH);
 		btnholder.add(submitButton);
 		btnholder.add(quitButton);
-		game.getLetters();
+		game.letterPlacement();
 		
 		}
 	}
