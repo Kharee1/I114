@@ -29,7 +29,7 @@ public class WordHunt {
 	public static final int nROWS = 10;
 	public static final int nCOLS = 10;
 	public static final int gridSize = nROWS * nCOLS;
-	public ArrayList<String> wordsToFind = new ArrayList<String>();
+	public static ArrayList<String> wordsToFind = new ArrayList<String>();
 		
 	Socket server;
 	public WordHunt() {
@@ -114,7 +114,6 @@ public class WordHunt {
 	}
 	
 	public void letterPlacement(){
-		//char ch;
 		char comma = ',';
 		for(String word: wordsToFind) {
 			for(int i = 0; i < word.length(); i++) {
@@ -122,30 +121,20 @@ public class WordHunt {
 				}
 				else {
 					char letter = word.charAt(i);
-					//System.out.println(letter);
 				}
 			}
 		}
 	}
-    
-	 public String foundWords(ArrayList<String> wordCheck) {
-		 StringBuilder builder = new StringBuilder();
-		 for(String ch : wordCheck) {
-			 builder.append(ch);
+	 public boolean compareWords(StringBuilder builder) {
+		 //for (String createdWord: wordsToFind) {
+		 String createdWord = "";
+		 if (wordsToFind.contains(createdWord)){
+			 System.out.println("hello");
 		 }
-	System.out.println("You created this word " + builder.toString());
-	return builder.toString(); 
-	 }
-	 
-	 public boolean compareWords(String builder) {
-		 for (String createdWord: wordsToFind) {
-			 if (wordsToFind.contains(createdWord)){
-				 System.out.println("Your word was found: " + createdWord);
-			 }
 			 //return createdWord;
-		 }
 		 return true;
-	 }
+	 }	 
+
 
 
 public static void main(String[] args) {
@@ -230,7 +219,7 @@ public static void main(String[] args) {
 						wordCheck.add(((JButton)e.getSource()).getText());
 						System.out.println(wordCheck.toString());
 						game.foundWords(wordCheck);
-						//game.wordComparison(foundWords, wordsToFind);
+						game.compareWords(null);
 						
 					}
 				});
